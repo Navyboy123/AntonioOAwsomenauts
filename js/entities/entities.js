@@ -12,8 +12,8 @@
                 }
             }]);
         this.type = "PlayerEntity";
-        this.health = 100; 
-        this.body.setVelocity(5, 20);
+        this.health = game.data.playerHealth; 
+        this.body.setVelocity(game.data.playerMoveSpeed, 20);
         //keeps track of where you character is facing// directional 
             this.facing = "right";
             this.now = new Date () .getTime();
@@ -98,9 +98,9 @@
                this.body.x = this.pos.x +1; 
             }       
             
-            if (this,renderable.isCurrentAnimmation ("attack") && this.now-this.lastHit>=1000){
+            if (this,renderable.isCurrentAnimmation ("attack") && this.now-this.lastHit>= game.data.playerAttackTimer){
                 this.lastHit= this.now;
-                response.loseHealth();
+                response.loseHealth(game.data.playerAttack);
             }
         }else if (response.b.type==='EnemyCreep'){
             var xdif = this.pos.x - response.b.pos.x;
@@ -118,12 +118,12 @@
                 }
             }
             
-            if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit>=1000
+            if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit>=game.data.playerAttackTimer
                    &&(Math.abs(ydif) <=40)&& 
                    (((xdif>0)&& this.facing==="left") || ((xdif<0)  && this.facing==='right'))
                    ){
                 this.lastHit = this.now; 
-                response.b.loseHealth(1);
+                response.b.loseHealth(game.data.playerAttack);
             }
         }
     } 
@@ -143,7 +143,7 @@ game.PlayerBaseEntity = me.Entity.extend ({
                }
             }]);
         this.broken =false;
-        this.health =10; 
+        this.health =game.data.playerBaseHealth; 
         this.alwaysUpdate = true;
         this.body.onCollision = this.onCollision.bind(this);
         console.log("init");
@@ -190,7 +190,7 @@ game.EnemyBaseEntity = me.Entity.extend ({
                }
             }]);
         this.broken =false;
-        this.health =10; 
+        this.health =game.data.enemyBaseHelth; 
         this.alwaysUpdate = true;
         this.body.onCollision = this.onCollision.bind(this);
         
@@ -226,16 +226,16 @@ game.EnemyBaseEntity = me.Entity.extend ({
 game.EnemyCreep = me.Entity.extend({
    init: function(x, y, settings){
        this._super(me.Entity, 'init', [x, y, {
-          image: "creep1"
+          image: "creep1",
           width: 32,
           height: 64,
           spritewidth: "32",
           spriteheight: "64",
-          getShape: fucntion () {
+          getShape: function () {
               return (new me.Rect(0, 0, 32, 64)) . toPolygon();
           }
         }]);
-        this.health = 10;
+        this.health = game.data.enemyCreepHealth;
         this.alwaysUpdate = true;
         //this.attacking lets up know if the enemy is currenly attacking
         this.attacking = false;
@@ -276,21 +276,22 @@ game.EnemyCreep = me.Entity.extend({
        
        
         this._super(me.Entity, "update", [delta]);
-       return.true;
+       return true;
         
    },
    
-   collideHandler:function (resposne){
-       if(response.b.type=='PlyerBase'){
+   collideHandler:function (response){
+       if(response.b.type=='PlayerBase'){
            this.attacking=true;
            this.lastAttacking=this.now;
            this.body.vel.x=0;
            this.pos.x = this.pos.x + 1;
            if((this.now-this.lastHit >=1000))
                this.lastHit = this.now; 
-           response.b.loseHealth(1);
+           response.b.loseHealth(game.data.enemyCreepAttack);
+           
        }
-   } else if (response.b.type==='PlayerEntity'){
+    else if (response.b.type==='PlayerEntity'){
         this.attacking=true;
            this.lastAttacking=this.now;
     
@@ -302,8 +303,9 @@ game.EnemyCreep = me.Entity.extend({
            this.pos.x = this.pos.x + 1;
            if((this.now-this.lastHit >=1000)&& xdif>0)
                this.lastHit = this.now; 
-           response.b.loseHealth(1);
-   } 
+           response.b.loseHealth(game.data.enemyCreepAttack);
+   }
+   }
 });
 
 game.GameManager = Object.extend ({
@@ -317,7 +319,7 @@ game.GameManager = Object.extend ({
     update:function(){
         this.now = new Date() .getTime();
         
-        if(Math.round(this.now/1000 %10 ===0&& (this.now - this.lastCreep >==1000)){
+        if(Math.round(this.now/1000) %10 ===0 && (this.now - this.lastCreep >=1000)){
             this.lastCreep = this.now;
             var creep = me.pool.pull("EnemyCreep", 1000, 0, {});
             me.game.world.addChild(creep,5);

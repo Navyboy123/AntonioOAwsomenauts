@@ -18,6 +18,8 @@
             this.facing = "right";
             this.now = new Date () .getTime();
             this.lastHit = this.now;
+            this.dead = false;
+            this.attack = game.data.playerAttack;
             this.lastAttack = new Date ().getTime();
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
 
@@ -123,6 +125,13 @@
                    (((xdif>0)&& this.facing==="left") || ((xdif<0)  && this.facing==='right'))
                    ){
                 this.lastHit = this.now; 
+                //if the creeps health is less than our attack then execute order if "if" statement
+                if(response.b.health <= game.data.playerAttack){
+                    //when the creeps is killed adds one gold for the creep death
+                    game.data.gold += 1;
+                    console.log("Current Gold:" + game.data.gold);
+                }
+                    
                 response.b.loseHealth(game.data.playerAttack);
             }
         }
@@ -312,7 +321,7 @@ game.GameManager = Object.extend ({
     init: function (x, y, settings){
         this.now = new Date ().getTime();
         this.lastCreep = new Date() .getTime();
-        
+        this.paused= false;
         this.alwaysUpdate = true; 
     },
     
@@ -322,6 +331,11 @@ game.GameManager = Object.extend ({
         if(game.data.player){
              me.game.world.removeChild(game.data.player);
             me.state.current().resetPlayer(10,0);
+        }
+        
+         if(Math.round(this.now/1000) %20 ===0 && (this.now - this.lastCreep >=1000)){
+          game.data.gold +=1;
+          console.log("Current Gold:" + game.data.gold);
         }
         
         if(Math.round(this.now/1000) %10 ===0 && (this.now - this.lastCreep >=1000)){

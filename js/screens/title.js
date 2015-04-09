@@ -35,4 +35,4 @@ game.TitleScreen = me.ScreenObject.extend({
 		me.input.unbindKEY(me.input.KEY.ENTER); // TODO
                 me.event.unsubscribe(this.handler);
 	}
-});
+}) 

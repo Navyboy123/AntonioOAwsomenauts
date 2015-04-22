@@ -20,7 +20,8 @@ var game = {
                 creepAttackTimer:1000,
                 playerMoveSpeed: 5,
                 creepMoveSpeed: 5,
-                gameManager:"",
+                gameTimerManager:"",
+                heroDeathManager:"",    
                 player: "",
                 exp: 0, 
                 gold: 0, 
@@ -47,6 +48,8 @@ var game = {
 			me.plugin.register.defer(this, debugPanel, "debug");
 		});
 	}
+        
+        me.save.add({exp:0, exp1: 0, exp2: 0, exp3: 0, exp4: 0 });
 
 	// Initialize the audio.
 	me.audio.init("mp3,ogg");
@@ -67,7 +70,8 @@ var game = {
                 me.pool.register("PlayerBase", game.PlayerBaseEntity);
                 me.pool.register("EnemyBase", game.EnemyBaseEntity);
                 me.pool.register("EnemyCreep", game.EnemyCreep, true);
-                me.pool.register("GameManager", game.GameManager);
+                me.pool.register("GameTimerManager", game.GameTimerManager);
+                me.pool.register("HeroDeathMnager", game.HeroDeathManager);
                 
 		me.state.set(me.state.MENU, new game.TitleScreen());
 		me.state.set(me.state.PLAY, new game.PlayScreen());

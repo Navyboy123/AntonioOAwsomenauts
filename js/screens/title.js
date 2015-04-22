@@ -4,26 +4,51 @@ game.TitleScreen = me.ScreenObject.extend({
 	 */
 	onResetEvent: function() {	
 		me.game.world.addChild(new me.Sprite(0, 0, me.loader.getImage('title-screen')), -10); // TODO
-                
-                me.input.bindKey(me.input.KEY.ENTER,"start");
-                
+ 
                 me.game.world.addChild(new(me.Renderable.extend({
                     inti:function(){
-                        this._super(me.Renderable, 'init', [510, 30, me.game.viewport.width, me.game.viewport.height])
+                        this._super(me.Renderable, 'init', [270, 240, 300, 50 ])
                         this.font = new me.Font("Arial", 46, "White");
+                        me.input.regiterPointEvent('pointerdown', this, this.newGame.bind(this), true)
                     },
                     
                     draw:function(renderer){
-                        this.font.draw(renderer.getContext(),"Awsomenauts!", 450, 130);
-                        this.font.draw(renderer.getContext(),"Press Enter to Play", 250, 530);
-                    }
-                })), 0);
+                        this.font.draw(renderer.getContext(),"Start New Game!", this.pos.x , this.pos.y);  
+                    },
+                    update: function(dt){
+                        return true;
+                    }, 
+                    
+                    newGame: function(){
+                      me.input.releasePointEvent('pointerdown', this);
+                              me.save.remove('exp');
+                              me.save.remove('exp1');
+                              me.save.remove('exp2');
+                              me.save.remove('exp3');
+                              me.save.remove('exp4');
+                              me.state.change(me.state.PLAY);
+                    } 
+                })));
                 
-                this.handler = me.event.subscribe(me.event.KEYDOWN, function (action,keyCode,edge){
-                    if(action==="start"){
-                        me.state.change(me.state.PLAY);
-                    }
-                })
+                me.game.world.addChild(new(me.Renderable.extend({
+                    inti:function(){
+                        this._super(me.Renderable, 'init', [380, 340, 250, 50 ])
+                        this.font = new me.Font("Arial", 46, "White");
+                        me.input.regiterPointEvent('pointerdown', this, this.newGame.bind(this), true)
+                    },
+                    
+                    draw:function(renderer){
+                        this.font.draw(renderer.getContext(),"Continue!", this.pos.x , this.pos.y);  
+                    },
+                    update: function(dt){
+                        return true;
+                    }, 
+                    
+                    newGame: function(){
+                      me.input.releasePointEvent('pointerdown', this);
+                              me.state.change(me.state.PLAY);
+                    } 
+                })));
                 
 	},
 	
@@ -32,7 +57,6 @@ game.TitleScreen = me.ScreenObject.extend({
 	 *  action to perform when leaving this screen (state change)
 	 */
 	onDestroyEvent: function() {
-		me.input.unbindKey(me.input.KEY.ENTER); // TODO
-                me.event.unsubscribe(this.handler);
+		
 	}
 }) 

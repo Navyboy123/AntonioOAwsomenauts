@@ -14,6 +14,7 @@ game.SpendExp = me.ScreenObject.extend({
                     draw:function(renderer){
                         this.font.draw(renderer.getContext(),"Press F1-F4!", this.pos.x , this.pos.y);  
                         this.font.draw(renderer.getContext(), "CURRENT EXP:" + game.data.exp.toString(), this.pos.x, this.pos.y + 100);
+                        
                     }
                     
                 })));

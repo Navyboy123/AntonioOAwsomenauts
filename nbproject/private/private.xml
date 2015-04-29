@@ -5,7 +5,7 @@
         <group>
             <file>file:/C:/xampp/htdocs/AntonioOAwsomenauts/js/game.js</file>
             <file>file:/C:/xampp/htdocs/AntonioOAwsomenauts/js/screens/spendEXP..js</file>
-            <file>file:/C:/xampp/htdocs/AntonioOAwsomenauts/js/screens/title.js</file>
+            <file>file:/C:/xampp/htdocs/AntonioOAwsomenauts/js/entities/GameManager.js</file>
         </group>
     </open-files>
 </project-private>

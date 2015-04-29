@@ -18,6 +18,9 @@ game.GameTimerManager = Object.extend ({
          if(Math.round(this.now/1000) %20 ===0 && (this.now - this.lastCreep >=1000)){
           game.data.gold +=1;
           console.log("Current Gold:" + game.data.gold);
+          // when ever the player gets a kill he recieves a certain ammount of exp. 
+          //logs  for the current ammount of gold the player currently has.
+          
         }
     },
     
@@ -26,11 +29,12 @@ game.GameTimerManager = Object.extend ({
             this.lastCreep = this.now;
             var creep = me.pool.pull("EnemyCreep", 1000, 0, {});
             me.game.world.addChild(creep,5);
+            //puts a timer on the creeps and incriments on when they wiill spawn
         }
     }
 });
 
-game.HeroDeathManager = object.extend({
+game.heroDeathManager = Object.extend({
    init: function(x, y, settings) {
         this.alwaysUpdate = true; 
    },  
@@ -43,12 +47,12 @@ game.HeroDeathManager = object.extend({
    }
 });
 
-game.ExperienceManager = object.extend({
+game.ExperienceManager = Object.extend({
    init: function (x, y, settings){
       this.alwaysUpdate = true; 
       this.gameOver = false;
    } ,
-   
+   //says "if you destroy the other base then the game will end. Or if your base if destroyed then the game will end.
    update: function (){
        if(game.data.win === true && !this.gameOver){
          this.gameOver(true);
@@ -57,7 +61,7 @@ game.ExperienceManager = object.extend({
        }
        return true;
    },
-   
+   //lets the player know that the game is over. 
    gameOver: function(win){
        if(win){
            game.data.exp +=10;

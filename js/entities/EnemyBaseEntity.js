@@ -21,7 +21,8 @@ game.EnemyBaseEntity = me.Entity.extend ({
         this.renderable.addAnimation("broken", [1]);
         this.renderable.setCurrentAnimation("idle");
         },
-    
+    //sets the animation for when the enemybase if broken
+    //also lets the game know if the game has ended
     update:function(delta){
         if(this.health<=0){
             this.broken = true;
@@ -40,6 +41,7 @@ game.EnemyBaseEntity = me.Entity.extend ({
     
     loseHealth: function() {
         this.health--;
+        //sets for if the enemy base is hit it begins to loose health
     }
     
 });
